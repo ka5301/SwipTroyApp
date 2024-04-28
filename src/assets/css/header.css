@@ -1,0 +1,27 @@
+.header {
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: x-large;
+  font-weight: 500;
+}
+
+.right {
+  display: flex;
+}
+
+.header-button {
+  margin-left: 1rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: #fff !important;
+  border-radius: 20px !important;
+  font-weight: 500 !important;
+}
