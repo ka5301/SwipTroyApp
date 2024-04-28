@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {user} from './business/userEndpoints';
 import {swip_troy_access, getCookie} from './business/authentication';
 import axios from 'axios';
+import Body from './components/Body';
 
 function App() {
   const [IsLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,6 +44,7 @@ function App() {
   return (
     <div className="App">
       <Header IsLoggedIn={IsLoggedIn} username={username} handleIsLoggedIn={handleIsLoggedIn}/>
+      <Body IsLoggedIn={IsLoggedIn}/>
     </div>
   );
 }
