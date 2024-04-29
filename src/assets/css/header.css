@@ -10,6 +10,7 @@
 .title {
   font-size: x-large;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .right {

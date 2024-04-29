@@ -12,10 +12,39 @@
 .story-item {
   width: calc(25% - 10px); /* Adjust the width as needed */
   margin-bottom: 20px; /* Add margin between the items */
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
   .story-item {
     width: calc(50% - 10px); /* Adjust for smaller screens */
   }
+}
+
+.modal-story-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  z-index: 1000; /* Ensure the overlay appears above other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-story {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+  padding: 20px;
+  max-width: 80%; /* Adjust as needed */
+  max-height: 80%; /* Adjust as needed */
+  overflow: auto;
+  z-index: 1001;
 }
