@@ -1,15 +1,20 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { user } from './business/userEndpoints';
-import { swip_troy_access, getCookie } from './business/authentication';
-import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import axios from 'axios';
+import { swip_troy_access, getCookie } from './business/authentication';
+import { user, stories as userStoriesEndpoint } from './business/userEndpoints';
+import { getStories, likeStory, bookmarkStory } from './business/storyEndpoints';
+
+//import { testStories, testUserStories } from './assets/js/staticdata';
+
 import Index from './components/Index';
 import StoryCategory from './components/StoryCategory';
 import StoryDetails from './components/StoryDetails';
-import { testStories, testUserStories } from './assets/js/staticdata';
 import StoryBookmark from './components/StoryBookmark';
 import StoryCreated from './components/StoryCreated';
+
 
 function App() {
   const [IsLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,11 +54,11 @@ function App() {
     }
 
     const fetchStories = async () => {
-      //const storiesResponse = await axios.get(getStories);
+      const storiesResponse = await axios.get(getStories);
       //console.log(storiesResponse);
-      //return storiesResponse.data;
+      return storiesResponse.data;
 
-      return testStories;
+      //return testStories;
     };
 
     const fetchData = async () => {
@@ -71,28 +76,48 @@ function App() {
     fetchData();
   }, []);
 
+  const handleLikeClick = async (id) => {
+    const token = getCookie(swip_troy_access);
+    await axios.patch(likeStory(id), {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  const handleBookmarkClick = async (id) => {
+    const token = getCookie(swip_troy_access);
+    await axios.patch(bookmarkStory(id), {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
   useEffect(() => {
     const fetchUserStories = async () => {
-      // if(IsLoggedIn) {
-      //     const token = getCookie(swip_troy_access);
-      //     if (token) {
-      //         try{
-      //             const userStoriesResponse = await axios.get(userStoriesEndpoint, {
-      //                 headers: {
-      //                     'Authorization': `Bearer ${token}`,
-      //                     'Content-Type': 'application/json'
-      //                 }
-      //             });
-      //             return userStoriesResponse.data.stories;
-      //         }
-      //         catch(error){
-      //             return "Something Went Wrong";
-      //         }
-      //     }
-      // }
-      // return {};
+      if (IsLoggedIn) {
+        const token = getCookie(swip_troy_access);
+        if (token) {
+          try {
+            const userStoriesResponse = await axios.get(userStoriesEndpoint, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            return userStoriesResponse.data.stories;
+          }
+          catch (error) {
+            return "Something Went Wrong";
+          }
+        }
+      }
+      return {};
 
-      return (IsLoggedIn ? testUserStories : {});
+      //return (IsLoggedIn ? testUserStories : {});
     }
 
     const fetchData = async () => {
@@ -102,7 +127,7 @@ function App() {
 
     fetchData();
 
-  }, [IsLoggedIn]);
+  }, [IsLoggedIn, handleBookmarkClick, handleLikeClick]);
 
   return (
     <Router>
@@ -115,6 +140,8 @@ function App() {
             stories={stories}
             userStories={userStories}
             categories={categories}
+            handleBookmarkClick={handleBookmarkClick}
+            handleLikeClick={handleLikeClick}
           />
         } />
         <Route path="/story/category/:category" element={
@@ -125,6 +152,8 @@ function App() {
             stories={stories}
             userStories={userStories}
             categories={categories}
+            handleBookmarkClick={handleBookmarkClick}
+            handleLikeClick={handleLikeClick}
           />
         } />
         <Route path="/story/bookmark" element={
@@ -135,6 +164,8 @@ function App() {
             stories={stories}
             userStories={userStories}
             categories={categories}
+            handleBookmarkClick={handleBookmarkClick}
+            handleLikeClick={handleLikeClick}
           />
         } />
         <Route path="/story/created" element={
@@ -145,9 +176,13 @@ function App() {
             stories={stories}
             userStories={userStories}
             categories={categories}
+            handleBookmarkClick={handleBookmarkClick}
+            handleLikeClick={handleLikeClick}
           />
         } />
-        <Route path="/story/:id" element={<StoryDetails IsLoggedIn={IsLoggedIn} />} />
+        <Route path="/story/:id" element={<StoryDetails IsLoggedIn={IsLoggedIn}
+          handleBookmarkClick={handleBookmarkClick}
+          handleLikeClick={handleLikeClick} />} />
       </Routes>
     </Router>
   );

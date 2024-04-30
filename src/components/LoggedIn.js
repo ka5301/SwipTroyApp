@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../assets/css/header.css';
+import MakeStory from './MakeStory';
 import { logout } from '../business/userEndpoints';
 import { swip_troy_access, getCookie, setCookie } from '../business/authentication';
 import axios from 'axios';
 
-const LoggedIn = ({ username, handleIsLoggedIn }) => {
+const LoggedIn = ({ username, handleIsLoggedIn, categories }) => {
+  const [showMakeStoryModal, setShowMakeStoryModal] = useState(false);
+  const toggleShowMakeStoryModal = () => {
+    setShowMakeStoryModal(!showMakeStoryModal);
+  };
 
   const handleLogoutClick = async () => {
     const token = getCookie(swip_troy_access);
@@ -32,10 +37,11 @@ const LoggedIn = ({ username, handleIsLoggedIn }) => {
     <>
       <div className="right">
         <button className="btn btn-danger header-button" onClick={() => window.location.href = "/story/bookmark"}>Bookmark</button>
-        <button className="btn btn-danger header-button">Add Story</button>
+        <button className="btn btn-danger header-button" onClick={toggleShowMakeStoryModal}>Add Story</button>
         <span className="btn">Hi, {username}</span>
         <button className="btn btn-danger header-button" onClick={handleLogoutClick}>Log Out</button>
       </div>
+      {showMakeStoryModal && <MakeStory categories={categories} closeModal={toggleShowMakeStoryModal} />}
     </>
   );
 };

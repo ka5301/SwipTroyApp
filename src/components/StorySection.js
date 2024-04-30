@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Story from './Story';
 import '../assets/css/story-section.css';
 
-const StorySection = ({ title, stories, showmore = true, handleSeeMore, IsLoggedIn }) => {
+const StorySection = ({ title, stories = [], showmore = true, handleSeeMore, IsLoggedIn, categories, canEdit = false, handleLikeClick, handleBookmarkClick }) => {
 
   const [selectedStory, setSelectedStory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +23,7 @@ const StorySection = ({ title, stories, showmore = true, handleSeeMore, IsLogged
       <div className="story-list-container">
         {stories.map((story) => (
           <div key={story._id} className="story-item">
-            <Story story={story} IsLoggedIn={IsLoggedIn} />
+            <Story categories={categories} canEdit={canEdit} handleLikeClick={handleLikeClick} handleBookmarkClick={handleBookmarkClick} story={story} IsLoggedIn={IsLoggedIn} />
           </div>
         ))}
       </div>
@@ -33,7 +33,7 @@ const StorySection = ({ title, stories, showmore = true, handleSeeMore, IsLogged
       {isModalOpen && (
         <div className="modal-story-overlay" onClick={closeModal}>
           <div className="modal-story">
-            <Story story={selectedStory} IsLoggedIn={IsLoggedIn} />
+            <Story categories={categories} handleLikeClick={handleLikeClick} handleBookmarkClick={handleBookmarkClick} story={selectedStory} IsLoggedIn={IsLoggedIn} />
             {/* Additional modal content can go here */}
           </div>
         </div>
